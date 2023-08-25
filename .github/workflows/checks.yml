@@ -1,0 +1,29 @@
+---
+name: Checks
+
+on: [push]
+
+jobs:
+  pre-commit-valida:
+    name: Validate with pre-commit
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Load environment variables
+        run: echo "${{ secrets.ENVIRONMENT_VARIABLES }}" > .env
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Upgrade PIP
+        run: |
+          pip install --upgrade pip
+      - name: setuptools
+        run: |
+          pip install "setuptools<58.0.0"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements_local.txt
+      - name: pre-commit testing
+        run: pre-commit run --all-files
