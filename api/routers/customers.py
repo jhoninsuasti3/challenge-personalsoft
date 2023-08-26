@@ -10,12 +10,12 @@ from fastapi_pagination import Page, Params, paginate
 router = APIRouter(prefix="/customers", tags=["customers"])
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema_customer.CustomersResults)
 def create_customer(customer: schema_customer.CustomerBase, db: Session = Depends(get_db)):
     try:
         customer = models.Customers(**customer.dict())
-        generic_post(customer, db)
-        return {"message": "Customer created successfully"}
+        customer = generic_post(customer, db)
+        return customer
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 

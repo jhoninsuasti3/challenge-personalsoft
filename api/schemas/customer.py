@@ -7,7 +7,6 @@ class CustomerBase(BaseModel):
     first_name: str = Field(..., example="John")
     address: str = Field(..., example="Jl. Raya Kebayoran Lama No. 12")
     last_name: str = Field(..., example="Doe")
-    is_active: bool = Field(..., example=True)
 
 
 class CustomerCreate(CustomerBase):

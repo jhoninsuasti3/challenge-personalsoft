@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from api.repository import orders as repository_order
 from api.repository import customers as repository_customer
-from api.schemas.orders import WorkBase
+from api.schemas.orders import WorkBase, WorkResponse
 from sqlalchemy.orm import Session
 from api.database.db import get_db
 from datetime import datetime
@@ -15,8 +15,11 @@ from api.tasks import add_event
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
-@router.post("/", status_code=status.HTTP_200_OK)
-def create_orders(order_req: WorkBase, db: Session = Depends(get_db)):
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=WorkResponse)
+def create_orders(
+    order_req: WorkBase,
+    db: Session = Depends(get_db),
+):
     try:
         order_req = order_req.dict(exclude_unset=True)
         order = repository_order.validate_exist(order_req.get("customer_id"), db)
@@ -24,7 +27,7 @@ def create_orders(order_req: WorkBase, db: Session = Depends(get_db)):
             data = {"start_date": datetime.now(), "is_active": True}
             update_generic(models.Customers, order_req.get("customer_id"), data, db)
         order_db = models.WorkOrders(**order_req)
-        generic_post(order_db, db)
+        order_database = generic_post(order_db, db)
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -33,7 +36,7 @@ def create_orders(order_req: WorkBase, db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
         )
-    return {"message": "Order created successfully!"}
+    return order_database
 
 
 @router.get("/{order_id}", status_code=status.HTTP_200_OK, response_model=OrderAndCustomerModel)

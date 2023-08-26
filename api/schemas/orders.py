@@ -82,3 +82,12 @@ class WorkOrderUpdate(enum.Enum):
 
 class OrderUpdate(BaseModel):
     status: Optional[WorkOrderUpdate]
+
+
+class WorkResponse(BaseModel):
+    id: str
+    customer_id: str
+    title: str
+
+    class Config:
+        orm_mode = True

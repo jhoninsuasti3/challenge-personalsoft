@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.testing
     env_file: .env
     stdin_open: false
     volumes:
@@ -33,7 +33,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - dev-db-data:/var/lib/postgresql/data
+      - dev-db-data-test:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -60,5 +60,5 @@ networks:
 
 volumes:
   redis: {}
-  dev-db-data:
+  dev-db-data-test:
   pgadmin:

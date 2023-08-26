@@ -1,8 +1,8 @@
-"""default false
+"""update workorders 
 
-Revision ID: db6a47a1f73a
-Revises: ab79b790ec0a
-Create Date: 2023-08-24 20:26:49.855764
+Revision ID: 21e89587bb26
+Revises: db6a47a1f73a
+Create Date: 2023-08-26 20:50:28.090537
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'db6a47a1f73a'
-down_revision = 'ab79b790ec0a'
+revision = '21e89587bb26'
+down_revision = 'db6a47a1f73a'
 branch_labels = None
 depends_on = None
 

@@ -33,7 +33,7 @@ class Customers(Base):
 
 class WorkOrders(Base):
     __tablename__ = "work_orders"
-    id = Column(String, primary_key=True, default=str(uuid.uuid4()), unique=True)
+    id = Column(String, primary_key=True, default=generate_uuid, unique=True)
     customer_id = Column(String, ForeignKey("customers.id"))
     title = Column(String(255), nullable=False)
     planned_date_begin = Column(DateTime(timezone=True))
