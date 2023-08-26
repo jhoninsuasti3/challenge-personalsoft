@@ -32,7 +32,6 @@ python -m pytest
 
 ---
 
-
 ## Run pre-commit
 
 pre-commit run --all-files
@@ -42,7 +41,10 @@ pre-commit run --all-files
 docker-compose -f docker-compose.testing.yml up --force-recreate --build
 docker-compose -f docker-compose.testing.yml run --rm api-total sh -c "pytest -vv"
 
-
 uvicorn api.main:app --host 0.0.0.0 --port 8001
 
 alembic revision --autogenerate -m "generate models"
+
+## Generate documentation yaml
+
+- python generate_open_api.py api.main:app
