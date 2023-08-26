@@ -13,9 +13,9 @@ def generate_uuid():
 
 
 class WorkOrderStatusEnum(enum.Enum):
-    NEW = "New"
-    DONE = "Done"
-    CANCELLED = "Cancelled"
+    NEW = "NEW"
+    DONE = "DONE"
+    CANCELLED = "CANCELLED"
 
 
 class Customers(Base):

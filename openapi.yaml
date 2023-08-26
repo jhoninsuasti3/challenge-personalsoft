@@ -1,0 +1,486 @@
+openapi: 3.0.2
+info:
+  title: API enerbit
+  description: Enerbit API
+  version: 0.1.0
+paths:
+  /:
+    get:
+      summary: Home
+      description: "Handler for the home route (\"/\") that returns a simple greeting\
+        \ message.\n\nReturns:\n    str: A plain text message indicating the purpose\
+        \ of the application."
+      operationId: home__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /customers/:
+    post:
+      tags:
+      - customers
+      summary: Create Customer
+      operationId: create_customer_customers__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerBase'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /customers/active:
+    get:
+      tags:
+      - customers
+      summary: Get Active Customers
+      operationId: get_active_customers_customers_active_get
+      parameters:
+      - required: false
+        schema:
+          title: Page
+          minimum: 1.0
+          type: integer
+          default: 1
+        name: page
+        in: query
+      - required: false
+        schema:
+          title: Size
+          maximum: 100.0
+          minimum: 1.0
+          type: integer
+          default: 50
+        name: size
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_CustomersResults_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /customers/{customer_id}/orders:
+    get:
+      tags:
+      - customers
+      summary: Get Customers
+      operationId: get_customers_customers__customer_id__orders_get
+      parameters:
+      - required: true
+        schema:
+          title: Customer Id
+          type: string
+        name: customer_id
+        in: path
+      - required: false
+        schema:
+          title: Page
+          minimum: 1.0
+          type: integer
+          default: 1
+        name: page
+        in: query
+      - required: false
+        schema:
+          title: Size
+          maximum: 100.0
+          minimum: 1.0
+          type: integer
+          default: 50
+        name: size
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /orders/:
+    get:
+      tags:
+      - orders
+      summary: Filter Orders
+      operationId: filter_orders_orders__get
+      parameters:
+      - required: false
+        schema:
+          title: Since
+          type: string
+        name: since
+        in: query
+      - required: false
+        schema:
+          title: Until
+          type: string
+        name: until
+        in: query
+      - required: false
+        schema:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+        name: status
+        in: query
+      - required: false
+        schema:
+          title: Page
+          minimum: 1.0
+          type: integer
+          default: 1
+        name: page
+        in: query
+      - required: false
+        schema:
+          title: Size
+          maximum: 100.0
+          minimum: 1.0
+          type: integer
+          default: 50
+        name: size
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - orders
+      summary: Create Orders
+      operationId: create_orders_orders__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkBase'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /orders/{order_id}:
+    get:
+      tags:
+      - orders
+      summary: Get Order By Id
+      operationId: get_order_by_id_orders__order_id__get
+      parameters:
+      - required: true
+        schema:
+          title: Order Id
+          type: string
+        name: order_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderAndCustomerModel'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - orders
+      summary: Update Order
+      operationId: update_order_orders__order_id__patch
+      parameters:
+      - required: true
+        schema:
+          title: Order Id
+          type: string
+        name: order_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CustomerBase:
+      title: CustomerBase
+      required:
+      - first_name
+      - address
+      - last_name
+      - is_active
+      type: object
+      properties:
+        first_name:
+          title: First Name
+          type: string
+          example: John
+        address:
+          title: Address
+          type: string
+          example: Jl. Raya Kebayoran Lama No. 12
+        last_name:
+          title: Last Name
+          type: string
+          example: Doe
+        is_active:
+          title: Is Active
+          type: boolean
+          example: true
+    CustomerModel:
+      title: CustomerModel
+      required:
+      - id
+      - first_name
+      - address
+      - last_name
+      - is_active
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        first_name:
+          title: First Name
+          type: string
+          example: John
+        address:
+          title: Address
+          type: string
+          example: Jl. Raya Kebayoran Lama No. 12
+        last_name:
+          title: Last Name
+          type: string
+          example: Doe
+        is_active:
+          title: Is Active
+          type: boolean
+          example: true
+        start_date:
+          title: Start Date
+          type: string
+          format: date-time
+        end_date:
+          title: End Date
+          type: string
+          format: date-time
+    CustomersResults:
+      title: CustomersResults
+      required:
+      - first_name
+      - address
+      - last_name
+      - is_active
+      - id
+      type: object
+      properties:
+        first_name:
+          title: First Name
+          type: string
+          example: John
+        address:
+          title: Address
+          type: string
+          example: Jl. Raya Kebayoran Lama No. 12
+        last_name:
+          title: Last Name
+          type: string
+          example: Doe
+        is_active:
+          title: Is Active
+          type: boolean
+          example: true
+        id:
+          title: Id
+          type: string
+        start_date:
+          title: Start Date
+          type: string
+          format: date-time
+        end_date:
+          title: End Date
+          type: string
+          format: date-time
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    OrderAndCustomerModel:
+      title: OrderAndCustomerModel
+      required:
+      - work_order
+      - customer
+      type: object
+      properties:
+        work_order:
+          $ref: '#/components/schemas/WorkOrderModel'
+        customer:
+          $ref: '#/components/schemas/CustomerModel'
+    OrderUpdate:
+      title: OrderUpdate
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/WorkOrderUpdate'
+    Page_CustomersResults_:
+      title: Page[CustomersResults]
+      required:
+      - items
+      - total
+      - page
+      - size
+      type: object
+      properties:
+        items:
+          title: Items
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomersResults'
+        total:
+          title: Total
+          minimum: 0.0
+          type: integer
+        page:
+          title: Page
+          minimum: 1.0
+          type: integer
+        size:
+          title: Size
+          minimum: 1.0
+          type: integer
+        pages:
+          title: Pages
+          minimum: 0.0
+          type: integer
+    ValidationError:
+      title: ValidationError
+      required:
+      - loc
+      - msg
+      - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+    WorkBase:
+      title: WorkBase
+      required:
+      - customer_id
+      - title
+      - planned_date_begin
+      - planned_date_end
+      - status
+      type: object
+      properties:
+        customer_id:
+          title: Customer Id
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          title: Title
+          type: string
+          example: Title example
+        planned_date_begin:
+          title: Planned Date Begin
+          type: string
+          example: '2021-01-01 00:00:00'
+        planned_date_end:
+          title: Planned Date End
+          type: string
+          example: '2021-12-31 23:59:59'
+        status:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+    WorkOrderModel:
+      title: WorkOrderModel
+      required:
+      - id
+      - title
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        title:
+          title: Title
+          type: string
+    WorkOrderStatusEnum:
+      title: WorkOrderStatusEnum
+      enum:
+      - NEW
+      - DONE
+      - CANCELLED
+      description: An enumeration.
+    WorkOrderUpdate:
+      title: WorkOrderUpdate
+      enum:
+      - DONE
+      - CANCELLED
+      description: An enumeration.

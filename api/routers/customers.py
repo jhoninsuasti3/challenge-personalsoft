@@ -29,6 +29,13 @@ def get_active_customers(db: Session = Depends(get_db), params: Params = Depends
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
-def get_customers():
-    pass
+@router.get("/{customer_id}/orders", status_code=status.HTTP_200_OK)
+def get_customers(customer_id: str, db: Session = Depends(get_db), params: Params = Depends()):
+    try:
+        customer_repository.get_customer(customer_id, db)
+        customers = customer_repository.get_orders_by_customer(customer_id, db)
+        return paginate(customers, params)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

@@ -7,3 +7,5 @@ black==23.1.0
 pre-commit
 coverage==7.2.5
 pytest==7.3.1
+httpx
+pyyaml
