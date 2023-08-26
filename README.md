@@ -1,8 +1,10 @@
 # Fastapi
 
-# Instructions to use
+
 
 ## Installation
+
+Para empezar a trabajar el proyecto las configuraciones iniciales del entorno, esto no será necesario despues de construida la imagen docker del proyecto
 
 ```
 python3 -m venv venv
@@ -18,6 +20,30 @@ pip install -r requirements.txt`
 docker build -t django-base-ms .
 docker-compose up --force-recreate --build
 ```
+
+# Creacion de accesos
+En la raiz del proSe debe crear un archivo .env y colocar los datos
+CELERY_BROKER_URL=redis://redis:6379/6
+CELERY_RESULT_BACKEND=redis://redis:6379/6
+DB_HOST=db
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASS=postgres
+DB_PORT=5432
+
+# Validaciones despliegue
+
+Una vez haya corrido docker-compose up --force-recreate --build, se debe validar las apis a traves de 
+http://localhost:8001/docs#/  La documentacion y pruebas de la misma será en swagger
+http://localhost:5001/browser/  La base de datos se despliega aquí, para ello considerar asociar los del archivo .env :
+
+port: 5432 (Es importante no contar con el puerto usado en la maquina que se probará la solución)
+
+El punto numero 6 de los requerimientos
+
+# Instructions to use
+
+
 
 ### Run tests
 
